@@ -6,9 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { AppointmentCard } from '@/components/cards/appointment-card';
 import { BackendGate } from '@/components/states/backend-gate';
-import { Card } from '@/components/ui/card';
 import { IconButton } from '@/components/ui/icon-button';
-import { MenuRow } from '@/components/ui/menu-row';
 import { Screen } from '@/components/ui/screen';
 import { Spacing, Typography } from '@/constants/theme';
 import { useAsync } from '@/hooks/use-async';
@@ -24,20 +22,21 @@ type Action = {
   label: string;
   description: string;
   href: Href;
+  accent: string;
 };
 
-const FIND_CARE: Action[] = [
-  { icon: 'medkit-outline', label: 'Hospitals', description: 'Nearby care and emergency units', href: '/(tabs)/hospitals' },
-  { icon: 'person-outline', label: 'Doctors', description: 'Specialists and consultation fees', href: '/doctors' },
-  { icon: 'bag-handle-outline', label: 'Pharmacies', description: 'Medicine availability nearby', href: '/pharmacies' },
-  { icon: 'scan-outline', label: 'Scans', description: 'Imaging and diagnostic services', href: '/scans' },
+const QUICK_ACTIONS: Action[] = [
+  { icon: 'medkit-outline', label: 'Hospitals', description: 'Nearby care', href: '/(tabs)/hospitals', accent: '#D5F1ED' },
+  { icon: 'person-outline', label: 'Doctors', description: 'Book consult', href: '/doctors', accent: '#E0F2FE' },
+  { icon: 'scan-outline', label: 'Scans', description: 'Diagnostics', href: '/scans', accent: '#FDE68A' },
+  { icon: 'bag-handle-outline', label: 'Pharmacy', description: 'Get meds', href: '/pharmacies', accent: '#FCE7F3' },
 ];
 
 const MANAGE_CARE: Action[] = [
-  { icon: 'calendar-clear-outline', label: 'Appointments', description: 'Requests, confirmations, and visits', href: '/(tabs)/appointments' },
-  { icon: 'folder-open-outline', label: 'Medical records', description: 'Visits, tests, and prescriptions', href: '/(tabs)/records' },
-  { icon: 'bed-outline', label: 'Hospital beds', description: 'Request admission or check availability', href: '/beds' },
-  { icon: 'pulse-outline', label: 'Health readings', description: 'Track blood pressure and more', href: '/health' },
+  { icon: 'calendar-clear-outline', label: 'Appointments', description: 'Requests and visits', href: '/(tabs)/appointments', accent: '#D5F1ED' },
+  { icon: 'folder-open-outline', label: 'Records', description: 'Tests and notes', href: '/(tabs)/records', accent: '#E2E8F0' },
+  { icon: 'bed-outline', label: 'Beds', description: 'Admission support', href: '/beds', accent: '#E0F2FE' },
+  { icon: 'pulse-outline', label: 'Vitals', description: 'Track health', href: '/health', accent: '#FEE2E2' },
 ];
 
 function greetingForHour(hour: number): string {
@@ -75,18 +74,29 @@ export default function HomeScreen() {
   const name = session.firstName ?? 'there';
 
   const renderActions = (actions: Action[]) => (
-    <Card padded={false}>
-      {actions.map((action, index) => (
-        <MenuRow
+    <View style={styles.actionGrid}>
+      {actions.map((action) => (
+        <Pressable
           key={action.label}
-          icon={action.icon}
-          label={action.label}
-          description={action.description}
+          accessibilityRole="button"
+          accessibilityLabel={action.label}
           onPress={() => router.push(action.href)}
-          last={index === actions.length - 1}
-        />
+          style={({ pressed }) => [
+            styles.actionCard,
+            {
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+              opacity: pressed ? 0.8 : 1,
+            },
+          ]}>
+          <View style={[styles.actionIcon, { backgroundColor: action.accent }]}>
+            <Ionicons name={action.icon} size={20} color={colors.primaryDeep} />
+          </View>
+          <Text style={[styles.actionLabel, { color: colors.text }]}>{action.label}</Text>
+          <Text style={[styles.actionDescription, { color: colors.textSecondary }]}>{action.description}</Text>
+        </Pressable>
       ))}
-    </Card>
+    </View>
   );
 
   return (
@@ -107,7 +117,7 @@ export default function HomeScreen() {
 
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Search hospitals, doctors, and pharmacies"
+        accessibilityLabel="Search healthcare providers"
         onPress={() => router.push('/search')}
         style={({ pressed }) => [
           styles.search,
@@ -122,6 +132,34 @@ export default function HomeScreen() {
           Search hospitals, doctors, pharmacies
         </Text>
       </Pressable>
+
+      <View style={[styles.heroCard, { backgroundColor: colors.primaryDeep }]}>
+        <View style={styles.heroTopRow}>
+          <Text style={styles.heroBadge}>Care overview</Text>
+          <Text style={styles.heroStatus}>Healthy</Text>
+        </View>
+        <Text style={styles.heroTitle}>Your care is on track</Text>
+        <Text style={styles.heroBody}>
+          {upcoming
+            ? `Next appointment is ${new Date(upcoming.startsAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}.`
+            : 'No appointments scheduled yet. Book a visit when you need it.'}
+        </Text>
+        <View style={styles.heroBottomRow}>
+          <View>
+            <Text style={styles.heroMetricLabel}>Active care</Text>
+            <Text style={styles.heroMetricValue}>{upcoming ? '1 visit' : '0 visits'}</Text>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push('/appointments/book/hospital')}
+            style={({ pressed }) => [
+              styles.heroButton,
+              { opacity: pressed ? 0.9 : 1 },
+            ]}>
+            <Text style={styles.heroButtonText}>Book visit</Text>
+          </Pressable>
+        </View>
+      </View>
 
       <Pressable
         accessibilityRole="button"
@@ -140,12 +178,12 @@ export default function HomeScreen() {
       </Pressable>
 
       <View style={styles.sectionRow}>
-        <Text style={[styles.section, { color: colors.text }]}>Find care</Text>
+        <Text style={[styles.section, { color: colors.text }]}>Quick care</Text>
       </View>
-      {renderActions(FIND_CARE)}
+      {renderActions(QUICK_ACTIONS)}
 
       <View style={styles.sectionRow}>
-        <Text style={[styles.section, { color: colors.text }]}>Manage care</Text>
+        <Text style={[styles.section, { color: colors.text }]}>My care</Text>
       </View>
       {renderActions(MANAGE_CARE)}
 
@@ -205,6 +243,74 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   searchText: { ...Typography.body, flex: 1 },
+  heroCard: {
+    borderRadius: 24,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.lg,
+    marginBottom: Spacing.xl,
+    overflow: 'hidden',
+  },
+  heroTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.md,
+  },
+  heroBadge: {
+    color: '#E6FFFB',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  heroStatus: {
+    color: '#D1FAE5',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  heroTitle: {
+    color: '#FFFFFF',
+    fontSize: 28,
+    fontWeight: '700',
+    lineHeight: 34,
+    marginBottom: Spacing.xs,
+  },
+  heroBody: {
+    color: '#D9F7F2',
+    fontSize: 15,
+    lineHeight: 22,
+    maxWidth: 260,
+    marginBottom: Spacing.lg,
+  },
+  heroBottomRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+  },
+  heroMetricLabel: {
+    color: '#C7F3EC',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  heroMetricValue: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 4,
+  },
+  heroButton: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+  },
+  heroButtonText: {
+    color: '#0F766E',
+    fontSize: 14,
+    fontWeight: '700',
+  },
   emergency: {
     borderRadius: 18,
     paddingHorizontal: Spacing.lg,
@@ -217,6 +323,30 @@ const styles = StyleSheet.create({
   emergencyCopy: { flex: 1, gap: 2 },
   emergencyTitle: { ...Typography.bodyMedium, color: '#FFFFFF', fontWeight: '700' },
   emergencyBody: { ...Typography.caption, color: '#FFFFFF', opacity: 0.9 },
+  actionGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
+  },
+  actionCard: {
+    width: '48%',
+    minHeight: 116,
+    borderRadius: 18,
+    borderWidth: 1,
+    padding: Spacing.lg,
+    justifyContent: 'space-between',
+  },
+  actionIcon: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionLabel: { ...Typography.bodyMedium, marginTop: Spacing.sm },
+  actionDescription: { ...Typography.caption },
   sectionRow: {
     flexDirection: 'row',
     alignItems: 'center',
