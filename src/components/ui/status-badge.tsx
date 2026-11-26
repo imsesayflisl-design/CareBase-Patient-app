@@ -3,22 +3,20 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Radius, Spacing, Typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-type Tone = 'neutral' | 'success' | 'warning' | 'error' | 'info' | 'primary';
-
 type Props = {
   label: string;
-  tone?: Tone;
+  tone?: 'neutral' | 'success' | 'warning' | 'error' | 'info' | 'primary';
 };
 
 export function StatusBadge({ label, tone = 'neutral' }: Props) {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
 
-  const map: Record<Tone, { bg: string; fg: string }> = {
+  const map: Record<typeof tone, { bg: string; fg: string }> = {
     neutral: { bg: colors.softBackground, fg: colors.textSecondary },
-    success: { bg: colors.successSoft, fg: isDark ? colors.success : '#15803D' },
-    warning: { bg: colors.warningSoft, fg: isDark ? colors.warning : '#B45309' },
-    error: { bg: colors.errorSoft, fg: isDark ? colors.error : '#B91C1C' },
-    info: { bg: colors.infoSoft, fg: isDark ? colors.info : '#1D4ED8' },
+    success: { bg: colors.successSoft, fg: colors.accent },
+    warning: { bg: colors.warningSoft, fg: colors.warning },
+    error: { bg: colors.errorSoft, fg: colors.error },
+    info: { bg: colors.infoSoft, fg: colors.info },
     primary: { bg: colors.primarySoft, fg: colors.primaryDeep },
   };
 
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
   },
   label: {
     ...Typography.small,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     textTransform: 'capitalize',
   },
 });

@@ -1,9 +1,10 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text, ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, type ColorValue, type ViewStyle } from 'react-native';
 
 import { Radius, Spacing, Typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useSpringPressStyle } from '@/components/motion/use-spring-press';
 
-type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'emergency' | 'accent';
+type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'accent';
 
 type Props = {
   title: string;
@@ -13,6 +14,16 @@ type Props = {
   disabled?: boolean;
   fullWidth?: boolean;
   style?: ViewStyle;
+};
+
+// Disabled background colors — material chip style for disabled states
+const DisabledBg: Record<Variant, ColorValue> = {
+  primary: '#E2E8F0',
+  secondary: '#E2E8F0',
+  outline: 'transparent',
+  ghost: 'transparent',
+  danger: '',
+  accent: '#DBEAFE',
 };
 
 export function Button({
@@ -28,22 +39,20 @@ export function Button({
   const isDisabled = disabled || loading;
 
   const backgrounds: Record<Variant, string> = {
-    primary: colors.primary,
+    primary: colors.accent,
     secondary: colors.softBackground,
     outline: 'transparent',
     ghost: 'transparent',
-    danger: colors.error,
-    emergency: colors.emergency,
+    danger: colors.errorSoft,
     accent: colors.accent,
   };
 
   const textColors: Record<Variant, string> = {
     primary: '#FFFFFF',
     secondary: colors.text,
-    outline: colors.primary,
-    ghost: colors.primary,
+    outline: colors.textSecondary,
+    ghost: colors.textSecondary,
     danger: '#FFFFFF',
-    emergency: '#FFFFFF',
     accent: '#FFFFFF',
   };
 
@@ -57,16 +66,21 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         {
-          backgroundColor: backgrounds[variant],
-          borderColor: variant === 'outline' ? colors.primary : 'transparent',
-          borderWidth: variant === 'outline' ? 1.5 : 0,
-          opacity: isDisabled ? 0.55 : pressed ? 0.88 : 1,
+          backgroundColor: isDisabled ? DisabledBg[variant] : backgrounds[variant],
+          borderColor: variant === 'outline' ? colors.border : undefined,
+          borderWidth: variant === 'outline' ? 1 : 0,
+          opacity: isDisabled ? 0.5 : pressed ? 0.92 : 1,
           alignSelf: fullWidth ? 'stretch' : 'flex-start',
         },
+        // spring press visual feedback on health-surface buttons
+        useSpringPressStyle().style(pressed),
         style,
-      ]}>
+      ]}
+    >
       {loading ? (
-        <ActivityIndicator color={textColors[variant]} />
+        <Text style={[styles.label, { color: textColors[variant] === '#FFFFFF' ? colors.accent : textColors[variant] }]}>
+          {String(title)}
+        </Text>
       ) : (
         <Text style={[styles.label, { color: textColors[variant] }]}>{title}</Text>
       )}
@@ -77,13 +91,13 @@ export function Button({
 const styles = StyleSheet.create({
   base: {
     minHeight: 52,
-    borderRadius: Radius.lg,
+    borderRadius: Radius.md,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing['2xl'],
   },
   label: {
-    ...Typography.bodyMedium,
+    ...Typography.formInput,
     fontWeight: '600',
   },
 });

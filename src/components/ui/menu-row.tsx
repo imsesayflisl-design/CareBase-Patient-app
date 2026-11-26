@@ -2,7 +2,7 @@ import type { ComponentProps } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import { HitSlop, Spacing, Typography } from '@/constants/theme';
+import { Spacing, Typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
@@ -34,7 +34,7 @@ export function MenuRow({
     <Pressable
       accessibilityRole={onPress ? 'button' : undefined}
       accessibilityLabel={description ? `${label}. ${description}` : label}
-      hitSlop={HitSlop}
+      hitSlop={8}
       onPress={onPress}
       disabled={!onPress}
       style={({ pressed }) => [
@@ -70,7 +70,7 @@ export function MenuRow({
 
 const styles = StyleSheet.create({
   row: {
-    minHeight: 60,
+    minHeight: 58,
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.md,

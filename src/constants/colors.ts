@@ -1,24 +1,29 @@
 /**
- * CareBase brand palette — light-mode-first healthcare identity.
+ * CareBase brand palette — inspired by Apple system colors.
+ * Flat slate base with health-metric accents: heart-rate red, oxygen blue, activity green.
  */
 export const Brand = {
-  primary: '#0D9488',
-  deepTeal: '#0F766E',
-  orange: '#FF8F00',
-  darkText: '#172B2B',
-  secondaryText: '#64748B',
-  background: '#F5F8F7',
-  softBackground: '#ECF3F2',
-  card: '#FFFFFF',
-  border: '#DFE7E6',
-  success: '#16A34A',
-  warning: '#F59E0B',
-  error: '#DC2626',
-  info: '#2563EB',
+  primary: '#0F172A',      // slate-900 — primary brand color
+  deepSlate: '#020617',    // slate-950 — deep backgrounds
+  accent: '#2563EB',       // blue-600 — single action accent
+  darkText: '#0F172A',     // slate-900
+  secondaryText: '#64748B', // slate-500
+  background: '#FFFFFF',   // pure white — light mode background
+  softBackground: '#F8FAFC', // slate-50
+  card: '#FFFFFF',         // card surfaces
+  border: '#E2E8F0',       // slate-200
+  error: '#DC2626',        // red-600
+  info: '#2563EB',         // blue-600 (single neutral accent)
   white: '#FFFFFF',
   black: '#000000',
-  emergency: '#DC2626',
-  emergencySoft: '#FEE2E2',
+
+  // Health-metric accent tokens
+  hrRed: '#EF4444',        // heart-rate accent
+  o2Blue: '#3B82F6',        // oxygen saturation accent
+  activityGreen: '#22C55E', // daily activity accent
+  metricSoft: '#FEE2E2',    // soft red-200 for HR card fills
+  o2Soft: '#DBEAFE',         // soft blue-200 for O2 card fills
+  activitySoft: '#DCFCE7',  // soft green-200 for activity card fills
 } as const;
 
 export const Colors = {
@@ -30,51 +35,61 @@ export const Colors = {
     card: Brand.card,
     border: Brand.border,
     primary: Brand.primary,
-    primaryDeep: Brand.deepTeal,
-    primarySoft: '#D5F1ED',
-    accent: Brand.orange,
-    success: Brand.success,
-    successSoft: '#DCFCE7',
-    warning: Brand.warning,
-    warningSoft: '#FEF3C7',
+    primaryDeep: Brand.deepSlate,
+    primarySoft: '#F1F5F9',
+    accent: Brand.accent,
+    success: Brand.accent,
+    successSoft: '#DBEAFE',
+    warning: '#B45309',     // slate-700
+    warningSoft: '#FEF3C7', // amber-200
     error: Brand.error,
-    errorSoft: '#FEE2E2',
+    errorSoft: '#FEE2E2',    // red-200
+    emergency: Brand.error,
     info: Brand.info,
     infoSoft: '#DBEAFE',
-    emergency: Brand.emergency,
-    emergencySoft: Brand.emergencySoft,
     tabInactive: Brand.secondaryText,
     tabActive: Brand.primary,
-    overlay: 'rgba(23, 43, 43, 0.45)',
-    skeleton: '#E8F0EF',
-    inputBackground: '#F7FAF9',
+    overlay: 'rgba(15, 23, 42, 0.45)',
+    skeleton: '#E2E8F0',
+    inputBackground: '#F8FAFC',
+    hrRed: Brand.hrRed,
+    o2Blue: Brand.o2Blue,
+    activityGreen: Brand.activityGreen,
+    metricSoft: Brand.metricSoft,
+    o2Soft: Brand.o2Soft,
+    activitySoft: Brand.activitySoft,
   },
   dark: {
     text: '#F8FAFC',
     textSecondary: '#94A3B8',
-    background: '#0B1414',
-    softBackground: '#12201F',
-    card: '#152524',
-    border: '#263A39',
-    primary: '#14B8A6',
-    primaryDeep: '#2DD4BF',
-    primarySoft: '#123B38',
-    accent: '#FF9F1A',
-    success: '#22C55E',
-    successSoft: '#12351F',
-    warning: '#FBBF24',
-    warningSoft: '#3A2C0B',
+    background: Brand.deepSlate,
+    softBackground: '#0F172A',
+    card: '#0F172A',
+    border: '#1E293B',
+    primary: '#F8FAFC',
+    primaryDeep: '#FFFFFF',
+    primarySoft: '#1E293B',
+    accent: '#3B82F6',
+    success: '#3B82F6',
+    successSoft: '#1D4ED8',
+    warning: '#F59E0B',
+    warningSoft: '#422006',
     error: '#F87171',
-    errorSoft: '#3F1D1D',
+    errorSoft: '#450A0A',
+    emergency: '#DC2626',
     info: '#60A5FA',
-    infoSoft: '#132A4A',
-    emergency: '#EF4444',
-    emergencySoft: '#3F1D1D',
+    infoSoft: '#172554',
     tabInactive: '#94A3B8',
-    tabActive: '#14B8A6',
-    overlay: 'rgba(0, 0, 0, 0.55)',
-    skeleton: '#1A2A29',
-    inputBackground: '#12201F',
+    tabActive: '#F8FAFC',
+    overlay: 'rgba(2, 6, 23, 0.7)',
+    skeleton: '#1E293B',
+    inputBackground: '#0F172A',
+    hrRed: '#F87171',
+    o2Blue: '#60A5FA',
+    activityGreen: '#4ADE80',
+    metricSoft: '#450A0A',
+    o2Soft: '#172554',
+    activitySoft: '#14532D',
   },
 } as const;
 

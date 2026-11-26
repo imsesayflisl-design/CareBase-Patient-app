@@ -10,7 +10,7 @@ import { useTheme } from '@/hooks/use-theme';
 const SLIDES = [
   {
     title: 'Find healthcare near you',
-    body: 'Discover hospitals, doctors, and pharmacies around you — even on affordable Android phones.',
+    body: 'Discover hospitals, doctors, and pharmacies around you — even on affordable phones.',
   },
   {
     title: 'Book appointments and medical services',
@@ -36,8 +36,8 @@ export default function IntroScreen() {
       </View>
 
       <View style={styles.hero}>
-        <View style={[styles.orb, { backgroundColor: colors.softBackground }]}>
-          <Text style={{ fontSize: 40, color: colors.primary }}>{index + 1}</Text>
+        <View style={[styles.orb, { backgroundColor: colors.softBackground, borderColor: colors.border }]}>
+          <Text style={{ fontSize: 40, color: colors.primary, fontWeight: '700' }}>{index + 1}</Text>
         </View>
         <Text style={[styles.title, { color: colors.text }]}>{slide.title}</Text>
         <Text style={[styles.body, { color: colors.textSecondary }]}>{slide.body}</Text>
@@ -62,7 +62,7 @@ export default function IntroScreen() {
           <Button title="Back" variant="outline" onPress={() => setIndex((v) => v - 1)} />
         ) : null}
         <Button
-          title={isLast ? 'Continue' : 'Continue'}
+          title="Continue"
           onPress={() => {
             if (isLast) router.push('/(auth)/sign-up');
             else setIndex((v) => v + 1);
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 32,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.md,

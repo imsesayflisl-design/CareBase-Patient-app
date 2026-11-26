@@ -1,15 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
+import { Screen } from '@/components/ui/screen';
 import { Spacing, Typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-type Props = {
-  title: string;
-  description?: string;
-  actionLabel?: string;
-  onAction?: () => void;
-};
+type Props = { title: string; description?: string; actionLabel?: string; onAction?: () => void };
 
 export function EmptyState({ title, description, actionLabel, onAction }: Props) {
   const { colors } = useTheme();

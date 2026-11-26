@@ -3,8 +3,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
+import { ClerkAuthProvider } from '@/lib/auth/clerk-session';
 import { LocalAuthProvider } from '@/lib/auth/session';
 import { ClerkRoot } from '@/lib/clerk/clerk-root';
+import { isClerkConfigured } from '@/lib/config';
 import { useTheme } from '@/hooks/use-theme';
 
 SplashScreen.preventAutoHideAsync().catch(() => undefined);
@@ -39,11 +41,12 @@ function RootNavigator() {
 }
 
 export default function RootLayout() {
+  const AuthProvider = isClerkConfigured() ? ClerkAuthProvider : LocalAuthProvider;
   return (
     <ClerkRoot>
-      <LocalAuthProvider>
+      <AuthProvider>
         <RootNavigator />
-      </LocalAuthProvider>
+      </AuthProvider>
     </ClerkRoot>
   );
 }

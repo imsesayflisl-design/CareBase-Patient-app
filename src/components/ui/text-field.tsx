@@ -1,29 +1,32 @@
 import { useState } from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputProps,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 
-import { Radius, Spacing, Typography } from '@/constants/theme';
+import { Spacing, Typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-type Props = TextInputProps & {
+type Props = {
   label: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
+  placeholder?: string;
+  keyboardType?: string;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  maxLength?: number;
+  multiline?: boolean;
+  numberOfLines?: number;
   error?: string;
   hint?: string;
   secureToggle?: boolean;
+  secureTextEntry?: boolean;
+  style?: object;
 };
 
 export function TextField({
   label,
   error,
   hint,
-  secureToggle,
-  secureTextEntry,
+  secureToggle = false,
+  secureTextEntry = false,
   style,
   ...rest
 }: Props) {
@@ -43,32 +46,30 @@ export function TextField({
         ]}>
         <TextInput
           placeholderTextColor={colors.textSecondary}
-          secureTextEntry={secureToggle ? hidden : secureTextEntry}
+          secureTextEntry={hidden}
           style={[styles.input, { color: colors.text }, style]}
-          {...rest}
+          {...(rest as any)}
         />
         {secureToggle ? (
           <Pressable onPress={() => setHidden((v) => !v)} hitSlop={8}>
-            <Text style={{ color: colors.primary, ...Typography.captionMedium }}>
+            <Text style={{ color: colors.accent, ...Typography.captionMedium }}>
               {hidden ? 'Show' : 'Hide'}
             </Text>
           </Pressable>
         ) : null}
       </View>
       {error ? <Text style={[styles.meta, { color: colors.error }]}>{error}</Text> : null}
-      {!error && hint ? (
-        <Text style={[styles.meta, { color: colors.textSecondary }]}>{hint}</Text>
-      ) : null}
+      {!error && hint ? <Text style={[styles.meta, { color: colors.textSecondary }]}>{hint}</Text> : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrap: { gap: Spacing.sm },
-  label: { ...Typography.label },
+  label: { ...Typography.formLabel },
   inputRow: {
     minHeight: 52,
-    borderRadius: Radius.md,
+    borderRadius: Spacing.md,
     borderWidth: 1,
     paddingHorizontal: Spacing.lg,
     flexDirection: 'row',
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    ...Typography.body,
+    ...Typography.formInput,
     paddingVertical: Spacing.md,
   },
   meta: { ...Typography.small },

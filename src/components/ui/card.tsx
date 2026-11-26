@@ -1,12 +1,13 @@
-import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
+import { ReactNode } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
 
-import { Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
   onPress?: () => void;
-  style?: ViewStyle;
+  style?: object;
   padded?: boolean;
 };
 
@@ -33,7 +34,7 @@ export function Card({ children, onPress, style, padded = true }: Props) {
       <Pressable
         accessibilityRole="button"
         onPress={onPress}
-        style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}>
+        style={({ pressed }) => [{ opacity: pressed ? 0.6 : 1 }]}>
         {body}
       </Pressable>
     );

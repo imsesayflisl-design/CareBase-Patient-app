@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo, useState, type ReactNode } from 're
 
 import { isClerkConfigured } from '@/lib/config';
 
-type AuthSession = {
+export type AuthSession = {
   isLoaded: boolean;
   isSignedIn: boolean;
   profileComplete: boolean;
@@ -14,7 +14,7 @@ type AuthSession = {
   setDemoSignedIn: (value: boolean) => void;
 };
 
-const AuthSessionContext = createContext<AuthSession | null>(null);
+export const AuthSessionContext = createContext<AuthSession | null>(null);
 
 /**
  * Auth session bridge.

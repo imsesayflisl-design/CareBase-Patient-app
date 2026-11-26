@@ -1,25 +1,11 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
-type Props = {
-  height?: number;
-  width?: number | `${number}%`;
-  style?: ViewStyle;
-};
-
-export function Skeleton({ height = 16, width = '100%', style }: Props) {
+export function Skeleton({ height = 16, width = '100%', style }: { height?: number; width?: number | `${number}%`; style?: object }) {
   const { colors } = useTheme();
-  return (
-    <View
-      style={[
-        styles.base,
-        { height, width, backgroundColor: colors.skeleton },
-        style,
-      ]}
-    />
-  );
+  return <View style={[styles.base, { height, width, backgroundColor: colors.skeleton }, style]} />;
 }
 
 export function SkeletonCard() {
@@ -33,12 +19,6 @@ export function SkeletonCard() {
 }
 
 const styles = StyleSheet.create({
-  base: {
-    borderRadius: Radius.sm,
-  },
-  card: {
-    padding: Spacing.lg,
-    borderRadius: Radius.xl,
-    marginBottom: Spacing.md,
-  },
+  base: { borderRadius: Radius.sm },
+  card: { padding: Spacing.lg, borderRadius: Radius.xl, marginBottom: Spacing.md },
 });
